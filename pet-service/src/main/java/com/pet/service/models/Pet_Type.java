@@ -1,9 +1,13 @@
 package com.pet.service.models;
 
 import javax.persistence.*;
+
+import lombok.Data;
+
 import java.io.Serializable;
 
 @Entity
+@Data
 @Table(name = "pet_type")
 public class Pet_Type implements Serializable {
 
@@ -13,20 +17,5 @@ public class Pet_Type implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String description;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	private Boolean state;
 }

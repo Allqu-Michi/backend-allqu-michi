@@ -18,7 +18,7 @@ public class PetTypeServiceImpl implements IPetTypeService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<Pet_Type> findAll() {
-		return (List<Pet_Type>) petTypeRepository.findAll();
+		return petTypeRepository.findAll();
 	}
 
 	@Override
@@ -36,6 +36,7 @@ public class PetTypeServiceImpl implements IPetTypeService{
 	public Pet_Type update(Pet_Type pet_Type, long id) {
     	Pet_Type pet_Type_ = petTypeRepository.findById(id).orElse(null);
     	pet_Type_.setDescription(pet_Type.getDescription());
+    	pet_Type_.setState(pet_Type.getState());
 		return petTypeRepository.save(pet_Type_);
 	}	
 
