@@ -1,10 +1,11 @@
 package com.pet.service.controllers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pet.service.dto.PetDto;
 import com.pet.service.models.Pet;
 import com.pet.service.services.IPetService;
 
@@ -25,31 +27,33 @@ public class PetController {
 	private IPetService petService;
 	
 	@GetMapping()
-	public List<Pet> listar(){
-		return petService.findAll();
+	public ResponseEntity<List<Pet>> listar(){
+		List<Pet> listPet = petService.findAll();
+		return new ResponseEntity<>(listPet, HttpStatus.OK); 
 	}
 	
 	@GetMapping("/{id}")
-	public Pet detalle(@PathVariable Long id) {
-		return petService.findById(id);
+	public  ResponseEntity<Pet> detalle(@PathVariable Long id) {
+		Pet pet = petService.findById(id);
+		return new ResponseEntity<>(pet, HttpStatus.OK); 
 	}
 	
 	@PostMapping()
-	public Pet save(@RequestBody Pet pet_Type) {
-		return petService.save(pet_Type);
+	public ResponseEntity<PetDto> PetDto(@Valid @RequestBody PetDto petDto) {
+		PetDto newPetDto = petService.save(petDto);
+		return new ResponseEntity<>(newPetDto, HttpStatus.CREATED); 
 	}
-
+	
     @PutMapping("/{id}")
-    public ResponseEntity<Pet> update(@PathVariable(value = "id") Long id, @RequestBody Pet pet) {
-        final Pet pet_ = petService.update(pet, id);
-        return ResponseEntity.ok(pet_);
+    public ResponseEntity<PetDto> update(@PathVariable(value = "id") Long id, @Valid @RequestBody PetDto petDto) {
+        final PetDto petDto_ = petService.update(petDto, id);
+		return new ResponseEntity<>(petDto_, HttpStatus.OK); 
     }
-
+    
     @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteApplication(@PathVariable(value = "id") Long id){
+    public ResponseEntity<String> deleteApplication(@PathVariable(value = "id") Long id){
         petService.delete(id);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+		return new ResponseEntity<>("Mascota eliminado con exito",HttpStatus.OK);
     }
+    
 }

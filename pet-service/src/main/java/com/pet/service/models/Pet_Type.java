@@ -17,5 +17,5 @@ public class Pet_Type implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String description;
-	private Boolean state;
+	private Boolean status;
 }

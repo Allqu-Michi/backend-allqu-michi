@@ -1,4 +1,4 @@
-package com.pet.service.services;
+package com.pet.service.implement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pet.service.models.Pet_Type;
 import com.pet.service.repositories.PetTypeRepository;
+import com.pet.service.services.IPetTypeService;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class PetTypeServiceImpl implements IPetTypeService{
 	public Pet_Type update(Pet_Type pet_Type, long id) {
     	Pet_Type pet_Type_ = petTypeRepository.findById(id).orElse(null);
     	pet_Type_.setDescription(pet_Type.getDescription());
-    	pet_Type_.setState(pet_Type.getState());
+    	pet_Type_.setStatus(pet_Type.getStatus());
 		return petTypeRepository.save(pet_Type_);
 	}	
 
