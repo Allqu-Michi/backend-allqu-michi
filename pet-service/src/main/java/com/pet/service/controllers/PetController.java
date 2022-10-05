@@ -21,7 +21,7 @@ import com.pet.service.models.Pet;
 import com.pet.service.services.IPetService;
 
 @RestController
-@RequestMapping("api/Pet")
+@RequestMapping("api/pet")
 public class PetController {
 	@Autowired
 	private IPetService petService;
@@ -40,8 +40,10 @@ public class PetController {
 	
 	@PostMapping()
 	public ResponseEntity<PetDto> PetDto(@Valid @RequestBody PetDto petDto) {
+		
 		PetDto newPetDto = petService.save(petDto);
-		return new ResponseEntity<>(newPetDto, HttpStatus.CREATED); 
+		return new ResponseEntity<>(newPetDto, HttpStatus.CREATED);
+		
 	}
 	
     @PutMapping("/{id}")

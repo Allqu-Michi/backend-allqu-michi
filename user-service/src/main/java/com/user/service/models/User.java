@@ -1,4 +1,4 @@
-package com.auth.service.models;
+package com.user.service.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "user", schema = "public")
-public class AuthUser implements Serializable {
+public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,8 @@ public class AuthUser implements Serializable {
     private String cellphone;
     private String email;
     private String password;
-    private boolean status;
     private LocalDateTime create_at;
     private LocalDateTime update_at;
+    private boolean status;
+	private Long role_id;
 }

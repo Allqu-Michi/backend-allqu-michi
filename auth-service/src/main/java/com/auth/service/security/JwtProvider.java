@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.auth.service.models.AuthUser;
+import com.auth.service.models.User;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -29,7 +29,7 @@ public class JwtProvider {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createToken(AuthUser authUser) {
+    public String createToken(User authUser) {
         Map<String, Object> claims = new HashMap<>();
         claims = Jwts.claims().setSubject(authUser.getEmail());
         claims.put("id", authUser.getId());

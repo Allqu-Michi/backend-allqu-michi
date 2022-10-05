@@ -1,0 +1,31 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+  # create and drop tables
+  jpa:
+    hibernate:
+      ddl-auto: none
+  # Oracle settings
+  datasource:
+    initialization-mode: always
+    platform: postgres
+    url: jdbc:postgresql://db.ecrhlxrwpezoizsstjdx.supabase.co/postgres
+    username: postgres
+    password: Nogheric2022*
+#jwt properties
+app:
+  jwt-secret: Secret
+  jwt-expiration-milliseconds: 86400000
+server:
+  port: ${PORT:${SERVER_PORT:0}}
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      default-zone: http://localhost:8761/eureka
+    instance:
+      # hostname: localhost
+      # Genera puerto aleatorio
+      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

@@ -1,6 +1,7 @@
 package com.pet.service.implement;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pet.service.dto.PetDto;
 import com.pet.service.exceptions.ResourceNotFoundException;
 import com.pet.service.models.Pet;
+import com.pet.service.models.Pet_Image;
+import com.pet.service.repositories.PetImageRepository;
 import com.pet.service.repositories.PetRepository;
 import com.pet.service.repositories.PetTypeRepository;
 import com.pet.service.services.IPetService;
@@ -22,6 +25,9 @@ public class PetServiceImpl implements IPetService{
 
 	@Autowired
 	private PetTypeRepository petTypeRepository;
+
+	@Autowired
+	private PetImageRepository petImageRepository;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -54,8 +60,26 @@ public class PetServiceImpl implements IPetService{
 		pet.setUpdate_at(LocalDateTime.now());
 		
 		Pet savePet = petRepository.save(pet);
+
+		List<Pet_Image> listPetImageData = new ArrayList<Pet_Image>();
+		List<String> List_images_url = petDto.getList_images_url();
+		List_images_url.forEach( (image_url) -> {
+			
+			Pet_Image savePetImageData = new Pet_Image();
+			savePetImageData.setPetId(savePet.getId());
+			savePetImageData.setImage_url(image_url);
+			listPetImageData.add(savePetImageData);
+			
+		});
 		
-		return mapearDTO(savePet);
+		if(listPetImageData.size() > 0) {
+			petImageRepository.saveAll(listPetImageData);
+		}
+		
+		PetDto newPetDto = mapearDTO(savePet);
+		newPetDto.setList_images_url(List_images_url);
+		
+		return newPetDto;
 	}	
 
 	@Override
@@ -77,6 +101,29 @@ public class PetServiceImpl implements IPetService{
 		pet_.setUpdate_at(LocalDateTime.now());
 		
 		Pet updatePet_ = petRepository.save(pet_);
+
+		List<Pet_Image> list_pet_image_exist = petImageRepository.findByPetId(id);
+		if(list_pet_image_exist.size() > 0) {
+			petImageRepository.deleteAll(list_pet_image_exist);
+		}
+		
+		List<Pet_Image> listPetImageData = new ArrayList<Pet_Image>();
+		List<String> List_images_url = petDto.getList_images_url();
+		List_images_url.forEach( (image_url) -> {
+			
+			Pet_Image savePetImageData = new Pet_Image();
+			savePetImageData.setPetId(updatePet_.getId());
+			savePetImageData.setImage_url(image_url);
+			listPetImageData.add(savePetImageData);
+			
+		});
+		
+		if(listPetImageData.size() > 0) {
+			petImageRepository.saveAll(listPetImageData);
+		}
+		
+		PetDto newPetDto = mapearDTO(updatePet_);
+		newPetDto.setList_images_url(List_images_url);
 		
 		return mapearDTO(updatePet_);
 	}	
@@ -85,6 +132,12 @@ public class PetServiceImpl implements IPetService{
 	public void delete(long id) {
     	Pet pet = petRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Mascota", "id", id));
+    	
+    	List<Pet_Image> list_pet_image_exist = petImageRepository.findByPetId(id);
+		if(list_pet_image_exist.size() > 0) {
+			petImageRepository.deleteAll(list_pet_image_exist);
+		}
+		
     	petRepository.delete(pet);
 	}
 	

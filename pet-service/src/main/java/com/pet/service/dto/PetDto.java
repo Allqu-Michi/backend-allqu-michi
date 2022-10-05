@@ -1,5 +1,7 @@
 package com.pet.service.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -34,11 +36,14 @@ public class PetDto {
 	private String color;
 	
 	private String image_url;
-	
+
+	@NotEmpty(message = "Debe tener un tipo de mascota")
 	private Long pet_type_id; // Debe existir en la tabla pet_type
 	
 	private Boolean status; // al ser registrado por un usuario será false
 	
 	private String breed; // Raza no usado
+
+	private List<String> list_images_url; // Lsstado de imagenes en cadena
 	
 }

@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.auth.service.dto.AuthUserDto;
 import com.auth.service.dto.TokenDto;
-import com.auth.service.models.AuthUser;
+import com.auth.service.dto.UserDto;
+import com.auth.service.models.User;
 import com.auth.service.repositories.AuthUserRepository;
 import com.auth.service.security.JwtProvider;
 
@@ -25,20 +26,21 @@ public class AuthUserService {
     @Autowired
     JwtProvider jwtProvider;
 
-    public AuthUser save(AuthUserDto dto) {
-        Optional<AuthUser> user = authUserRepository.findByEmail(dto.getEmail());
+    public User save(UserDto userDto) {
+        Optional<User> user = authUserRepository.findByEmail(userDto.getEmail());
         if(user.isPresent())
             return null;
         
-        String password = passwordEncoder.encode(dto.getPassword());
-        AuthUser authUser = AuthUser.builder()
-                .name(dto.getName())
-                .first_name(dto.getFirst_name())
-                .last_name(dto.getLast_name())
-                .cellphone(dto.getCellphone())
-                .email(dto.getEmail())
+        String password = passwordEncoder.encode(userDto.getPassword());
+        User authUser = User.builder()
+                .name(userDto.getName())
+                .first_name(userDto.getFirst_name())
+                .last_name(userDto.getLast_name())
+                .cellphone(userDto.getCellphone())
+                .email(userDto.getEmail())
                 .password(password)
-                .status(dto.getStatus())
+                .status(userDto.getStatus())
+                .role_id(1L) // Rol User
 				//.create_at(LocalDateTime.now());
         		//.update_at(LocalDateTime.now());
                 .build();
@@ -51,7 +53,7 @@ public class AuthUserService {
     }
 
     public TokenDto login(AuthUserDto dto) {
-        Optional<AuthUser> user = authUserRepository.findByEmail(dto.getEmail());
+        Optional<User> user = authUserRepository.findByEmail(dto.getEmail());
         if(!user.isPresent())
             return null;
         if(passwordEncoder.matches(dto.getPassword(), user.get().getPassword()))

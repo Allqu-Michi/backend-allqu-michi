@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.auth.service.dto.AuthUserDto;
 import com.auth.service.dto.TokenDto;
-import com.auth.service.models.AuthUser;
+import com.auth.service.dto.UserDto;
+import com.auth.service.models.User;
 import com.auth.service.service.AuthUserService;
 
 @RestController
@@ -37,8 +38,8 @@ public class AuthUserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<AuthUser> create(@RequestBody AuthUserDto dto){
-        AuthUser authUser = authUserService.save(dto);
+    public ResponseEntity<User> create(@RequestBody UserDto userDto){
+        User authUser = authUserService.save(userDto);
         if(authUser == null)
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(authUser);

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/PetType")
+@RequestMapping("api/pettype")
 public class PetTypeController {
 	
 	@Autowired

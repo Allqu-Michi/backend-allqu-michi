@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "pet_type")
+@Table(name = "pet_type", schema = "public")
 public class Pet_Type implements Serializable {
 
 	private static final long serialVersionUID = 1L;
