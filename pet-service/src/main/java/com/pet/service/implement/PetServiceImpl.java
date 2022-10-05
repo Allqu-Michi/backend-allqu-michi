@@ -46,7 +46,49 @@ public class PetServiceImpl implements IPetService{
 	}
 
 	@Override
-	public PetDto save(PetDto petDto) {
+	public PetDto save_one(PetDto petDto, Long user_id) {
+
+		Pet petValid = valid_pet(petDto, user_id);
+		Pet savePet = petRepository.save(petValid);
+		
+		List<String> List_images_url = save_images(petDto, savePet.getId());
+		
+		PetDto newPetDto = mapearDTO(savePet);
+		newPetDto.setList_images_url(List_images_url);
+		
+		return newPetDto;
+	}
+
+	@Override
+	public List<PetDto> save_multiple(List<PetDto> listPetDto, Long user_id) {
+		
+		List<Pet> listPetValid = new ArrayList<Pet>();
+		
+		listPetDto.forEach((petDto)->{
+			Pet petValid = valid_pet(petDto, user_id);
+			listPetValid.add(petValid);
+		});
+
+		List<PetDto> listPetDtoValid = new ArrayList<PetDto>();
+		int index = 0;
+		
+		for(Pet pet : listPetValid) {
+
+			Pet savePet = petRepository.save(pet);
+			
+			List<String> List_images_url = save_images(listPetDto.get(index), savePet.getId());
+			PetDto newPetDto = mapearDTO(savePet);
+			newPetDto.setList_images_url(List_images_url);
+			
+			listPetDtoValid.add(newPetDto);
+			
+			index++;
+		}
+		
+		return listPetDtoValid;
+	}
+	
+	public Pet valid_pet(PetDto petDto, Long user_id) {
 		
 		Pet pet = mapearEntidad(petDto);	
 		
@@ -56,17 +98,21 @@ public class PetServiceImpl implements IPetService{
 		
 		pet.setAdopted(false);
 		pet.setStatus(false);
+		pet.setUser_id(user_id);
 		pet.setCreate_at(LocalDateTime.now());
 		pet.setUpdate_at(LocalDateTime.now());
 		
-		Pet savePet = petRepository.save(pet);
-
+		return pet;
+	}
+	
+	public List<String> save_images(PetDto petDto, Long pet_id) {
+		
 		List<Pet_Image> listPetImageData = new ArrayList<Pet_Image>();
 		List<String> List_images_url = petDto.getList_images_url();
 		List_images_url.forEach( (image_url) -> {
 			
 			Pet_Image savePetImageData = new Pet_Image();
-			savePetImageData.setPetId(savePet.getId());
+			savePetImageData.setPetId(pet_id);
 			savePetImageData.setImage_url(image_url);
 			listPetImageData.add(savePetImageData);
 			
@@ -76,12 +122,9 @@ public class PetServiceImpl implements IPetService{
 			petImageRepository.saveAll(listPetImageData);
 		}
 		
-		PetDto newPetDto = mapearDTO(savePet);
-		newPetDto.setList_images_url(List_images_url);
-		
-		return newPetDto;
-	}	
-
+		return List_images_url;
+	}
+	
 	@Override
 	public PetDto update(PetDto petDto, long id) {
 		Pet pet_ = petRepository.findById(id)

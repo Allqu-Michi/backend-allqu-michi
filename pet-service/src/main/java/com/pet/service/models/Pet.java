@@ -42,5 +42,7 @@ public class Pet implements Serializable {
 	
 	@Column(name = "update_at", nullable = true)
 	private LocalDateTime update_at;
-	
+
+	@Column(name = "user_id", nullable = false)
+	private Long user_id;
 }

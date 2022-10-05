@@ -38,11 +38,19 @@ public class PetController {
 		return new ResponseEntity<>(pet, HttpStatus.OK); 
 	}
 	
-	@PostMapping()
-	public ResponseEntity<PetDto> PetDto(@Valid @RequestBody PetDto petDto) {
+	@PostMapping("/user/{user_id}")
+	public ResponseEntity<PetDto> save(@Valid @RequestBody PetDto petDto, @PathVariable(value = "user_id") Long user_id) {
 		
-		PetDto newPetDto = petService.save(petDto);
+		PetDto newPetDto = petService.save_one(petDto, user_id);
 		return new ResponseEntity<>(newPetDto, HttpStatus.CREATED);
+		
+	}
+	
+	@PostMapping("/multiple/user/{user_id}")
+	public ResponseEntity<List<PetDto>> save_multiple(@Valid @RequestBody List<PetDto> listPetDto, @PathVariable(value = "user_id") Long user_id) {
+		
+		List<PetDto> newListPetDto = petService.save_multiple(listPetDto, user_id);
+		return new ResponseEntity<>(newListPetDto, HttpStatus.CREATED);
 		
 	}
 	
