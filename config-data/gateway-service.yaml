@@ -23,8 +23,7 @@ spring:
         - id: pet-service
           uri: lb://pet-service
           predicates:
-            - Path=/api/pet/**
-            - Path=/api/pettype/**
+            - Path=/api/pet/**,/api/pettype/**
         - id: auth-service
           uri: lb://auth-service
           predicates:
