@@ -20,6 +20,8 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/api/user/**
+          filters:
+            - AuthFilter
         - id: pet-service
           uri: lb://pet-service
           predicates:
