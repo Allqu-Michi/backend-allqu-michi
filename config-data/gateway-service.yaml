@@ -10,6 +10,9 @@ eureka:
       hostname: localhost
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
   cloud:
     gateway:
       discovery:
